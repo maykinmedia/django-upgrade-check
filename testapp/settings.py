@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
@@ -55,3 +56,6 @@ TEMPLATES = [
 ROOT_URLCONF = "testapp.urls"
 
 STATIC_URL = "/static/"
+
+RELEASE = os.getenv("RELEASE", "latest")
+GIT_SHA = os.getenv("GIT_SHA", "latest")
