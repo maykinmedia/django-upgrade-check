@@ -4,6 +4,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+def get_machine_name():
+    return socket.gethostname()
+
+
 class Version(models.Model):
     """
     Capture metadata about a "deployed" version.
@@ -18,6 +22,7 @@ class Version(models.Model):
     version to allow making comparisons for upgrade-checking purposes. Anything else is
     best-effort and captures potentially interesting metadata.
     """
+
     version = models.CharField(
         _("version"),
         max_length=100,
@@ -38,7 +43,7 @@ class Version(models.Model):
     machine_name = models.CharField(
         _("machine name"),
         max_length=255,
-        default=socket.gethostname,
+        default=get_machine_name,
         editable=False,
         help_text=_("The host name of the machine this version was recorded on."),
     )
@@ -50,7 +55,9 @@ class Version(models.Model):
             models.Index(models.F("timestamp").desc(), name="timestamp_idx"),
         ]
         models.constraints = [
-            models.CheckConstraint(name="non_empty_version", check=~models.Q(version="")),
+            models.CheckConstraint(
+                name="non_empty_version", check=~models.Q(version="")
+            ),
         ]
         ordering = ("-timestamp",)
 
