@@ -1,4 +1,7 @@
 import logging
+from io import StringIO
+
+from django.core.management import call_command
 
 import pytest
 
@@ -53,3 +56,14 @@ def test_record_new_version_no_debounce_different_version(settings):
 
     assert result is not None
     assert Version.objects.count() == 2
+
+
+@pytest.mark.django_db
+def test_migrate_records_version(settings):
+    settings.RELEASE = "1.2.3"
+    assert not Version.objects.exists()
+
+    call_command("migrate", stdout=StringIO(), stderr=StringIO(), verbosity=0)
+
+    version = Version.objects.get()
+    assert version.version == "1.2.3"
