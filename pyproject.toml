@@ -3,15 +3,15 @@ requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "django_upgrade_check"
+name = "django-upgrade-check"
 version = "0.1.0"
-description = "TODO"
+description = "Integrate project upgrade checks in Django's system check framework"
 authors = [
     {name = "Maykin Media", email = "support@maykinmedia.nl"}
 ]
 readme = "README.rst"
 license = {file = "LICENSE"}
-keywords = ["TODO"]
+keywords = ["Django", "deploy", "system checks"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Framework :: Django",
@@ -20,21 +20,19 @@ classifiers = [
     "Operating System :: Unix",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "django>=4.2"
 ]
 
 [project.urls]
-Homepage = "https://github.com/maykinmedia/django_upgrade_check"
-Documentation = "http://django_upgrade_check.readthedocs.io/en/latest/"
-"Bug Tracker" = "https://github.com/maykinmedia/django_upgrade_check/issues"
-"Source Code" = "https://github.com/maykinmedia/django_upgrade_check"
+Homepage = "https://github.com/maykinmedia/django-upgrade-check"
+Documentation = "http://django-upgrade-check.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/maykinmedia/django-upgrade-check/issues"
+"Source Code" = "https://github.com/maykinmedia/django-upgrade-check"
 
 [project.optional-dependencies]
 tests = [
@@ -45,6 +43,8 @@ tests = [
     "isort",
     "black",
     "flake8",
+    "pyright",
+    "django-stubs",
 ]
 docs = [
     "sphinx",
@@ -94,5 +94,14 @@ exclude_also = [
     "@(abc\\.)?abstractmethod",
     "raise NotImplementedError",
     "\\.\\.\\.",
-    "pass",
 ]
+
+[tool.pyright]
+include = [
+    "django_upgrade_check",
+    "testapp",
+    "tests",
+]
+ignore = []
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
