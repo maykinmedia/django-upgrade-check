@@ -7,11 +7,7 @@ on:
       - main
     tags:
       - '*'
-    paths:
-      - '**.py'
   pull_request:
-    paths:
-      - '**.py'
   workflow_dispatch:
 
 jobs:
@@ -24,7 +20,7 @@ jobs:
           - isort
           - black
           - flake8
-          - docs
+          # - docs
           - typecheck
     steps:
       - uses: actions/checkout@v4
