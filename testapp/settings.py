@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.admin",
+    "django.contrib.staticfiles",
     "django_upgrade_check",
     "testapp",
 ]
@@ -52,3 +53,5 @@ TEMPLATES = [
 ]
 
 ROOT_URLCONF = "testapp.urls"
+
+STATIC_URL = "/static/"
