@@ -13,7 +13,7 @@ from dataclasses import dataclass
 
 from semantic_version import Version
 
-__all__ = ["VersionRange"]
+__all__ = ["VersionRange", "UpgradeCheck"]
 
 
 @dataclass(frozen=True)
