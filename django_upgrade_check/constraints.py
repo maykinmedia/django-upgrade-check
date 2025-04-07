@@ -8,6 +8,7 @@ and project-specific checks.
 We currently only support SemVer for the version comparisons.
 """
 
+from collections.abc import Collection
 from dataclasses import dataclass
 
 from semantic_version import Version
@@ -47,3 +48,38 @@ class VersionRange:
         if max_version and in_version > max_version:
             return False
         return True
+
+
+class UpgradeCheck:
+    """
+    Define the conditions for a valid upgrade check.
+
+    Provide either a :class:`VersionRange` or a collection of version ranges to test if
+    this check passes. The version number check passes as soon as one range satisfies
+    the provided version.
+
+    .. todo:: support management command checks
+    .. todo:: support arbitrary callables/callbacks for additional (script) checks
+    """
+
+    valid_ranges: Collection[VersionRange]
+
+    def __init__(
+        self,
+        valid_range: VersionRange | Collection[VersionRange],
+    ):
+        # normalize to a collection
+        self.valid_ranges = (
+            (valid_range,) if isinstance(valid_range, VersionRange) else valid_range
+        )
+
+    def check_version(self, current_version: Version) -> bool:
+        """
+        Check if the provided version is contained in any of the valid ranges.
+
+        :arg current_version: The version the application is currently at.
+        """
+        for version_range in self.valid_ranges:
+            if version_range.contains(current_version):
+                return True
+        return False

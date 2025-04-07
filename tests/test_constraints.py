@@ -1,7 +1,7 @@
 import pytest
 from semantic_version import Version
 
-from django_upgrade_check.constraints import VersionRange
+from django_upgrade_check.constraints import UpgradeCheck, VersionRange
 
 
 @pytest.mark.parametrize(
@@ -44,3 +44,52 @@ def test_containment(minimum: str, maximum: str, test: str, expected_result: boo
     result = version_range.contains(Version.coerce(test))
 
     assert result == expected_result
+
+
+@pytest.mark.parametrize(
+    "test_version,expected",
+    [
+        ("1.0.0", False),
+        ("1.1.2", False),
+        ("1.1.3", True),
+        ("1.2.0", True),
+        ("2.0.0", True),
+        ("2.0.1", False),
+        ("2.1.0", False),
+    ],
+)
+def test_ugprade_check_single_range(test_version: str, expected: bool):
+    check = UpgradeCheck(valid_range=VersionRange(minimum="1.1.3", maximum="2.0.0"))
+    current_version = Version(test_version)
+
+    result = check.check_version(current_version)
+
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "test_version,expected",
+    [
+        ("1.0.0", False),
+        ("1.1.2", False),
+        ("1.1.3", True),
+        ("1.1.5", True),
+        ("1.1.6", False),
+        ("1.2.0", True),
+        ("2.0.0", True),
+        ("2.0.1", False),
+        ("2.1.0", False),
+    ],
+)
+def test_ugprade_check_multiple_ranges(test_version: str, expected: bool):
+    check = UpgradeCheck(
+        valid_range={
+            VersionRange(minimum="1.1.3", maximum="1.1.5"),
+            VersionRange(minimum="1.2.0", maximum="2.0.0"),
+        }
+    )
+    current_version = Version(test_version)
+
+    result = check.check_version(current_version)
+
+    assert result == expected
