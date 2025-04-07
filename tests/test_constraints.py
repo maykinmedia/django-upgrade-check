@@ -1,7 +1,13 @@
 import pytest
 from semantic_version import Version
 
-from django_upgrade_check.constraints import UpgradeCheck, VersionRange
+from django_upgrade_check.constraints import (
+    InvalidVersionError,
+    TargetVersionMatchError,
+    UpgradeCheck,
+    VersionRange,
+    check_upgrade_possible,
+)
 
 
 @pytest.mark.parametrize(
@@ -106,3 +112,90 @@ def test_ugprade_check_multiple_ranges(test_version: str, expected: bool):
     result = check.check_version(current_version)
 
     assert result == expected
+
+
+UPGRADE_CONFIG = {
+    "1.4": UpgradeCheck(
+        {
+            VersionRange(minimum="1.2.2", maximum="1.2.9"),
+            VersionRange(minimum="1.3.4"),
+        }
+    ),
+    "1.4.9": UpgradeCheck(VersionRange(minimum="1.4.3")),
+}
+
+
+@pytest.mark.parametrize(
+    "from_version,to_version,expected_result",
+    [
+        ("1.0.0", "1.4.0", False),
+        ("1.2.1", "1.4.0", False),
+        ("1.2.2", "1.4.0", True),
+        ("1.2.3", "1.4.0", True),
+        ("1.2.3", "1.4.1", True),
+        ("1.2.3", "1.4.2", True),
+        ("1.2.9", "1.4.2", True),
+        ("1.2.10", "1.4.2", False),
+        ("1.3.3", "1.4.0", False),
+        ("1.3.4", "1.4.0", True),
+        ("1.3.999", "1.4.999", True),
+        ("1.4.0", "1.4.0", True),
+        ("1.3.5", "1.4.9", False),
+        ("1.4.4", "1.4.9", True),
+    ],
+)
+def test_upgrade_possible(from_version: str, to_version: str, expected_result: bool):
+    result = check_upgrade_possible(
+        UPGRADE_CONFIG,
+        from_version=from_version,
+        to_version=to_version,
+        raise_if_no_match=True,
+    )
+
+    assert result == expected_result
+
+
+def test_upgrade_possible_no_match_strict_mode():
+    with pytest.raises(TargetVersionMatchError):
+        check_upgrade_possible(
+            UPGRADE_CONFIG,
+            from_version="1.4.10",
+            to_version="2.1.0",
+            raise_if_no_match=True,
+        )
+
+
+def test_upgrade_possible_no_match_lax_mode():
+    result = check_upgrade_possible(
+        UPGRADE_CONFIG,
+        from_version="1.4.10",
+        to_version="2.1.0",
+        raise_if_no_match=False,
+    )
+
+    assert result is True
+
+
+def test_dont_block_if_already_in_target_range():
+    result = check_upgrade_possible(
+        {"2.0": UpgradeCheck(VersionRange(minimum="1.1.0", maximum="1.1.9"))},
+        from_version="2.0.1",
+        to_version="2.0.2",
+    )
+
+    assert result is True
+
+
+@pytest.mark.parametrize(
+    "from_version,to_version",
+    [
+        ("1.0", "1.4.0"),
+        ("1.0.0", "1.4"),
+        ("2025.4", "1.4.9"),
+    ],
+)
+def test_invalid_input_versions(from_version: str, to_version: str):
+    with pytest.raises(InvalidVersionError) as err_ctx:
+        check_upgrade_possible(
+            UPGRADE_CONFIG, from_version=from_version, to_version=to_version
+        )

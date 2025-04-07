@@ -8,12 +8,18 @@ and project-specific checks.
 We currently only support SemVer for the version comparisons.
 """
 
-from collections.abc import Collection
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass, field
 
-from semantic_version import Version
+from semantic_version import SimpleSpec, Version
 
-__all__ = ["VersionRange", "UpgradeCheck"]
+__all__ = [
+    "VersionRange",
+    "UpgradeCheck",
+    "InvalidVersionError",
+    "TargetVersionMatchError",
+    "check_upgrade_possible",
+]
 
 
 @dataclass(slots=True, unsafe_hash=True)
@@ -89,3 +95,76 @@ class UpgradeCheck:
             if version_range.contains(current_version):
                 return True
         return False
+
+
+type UpgradePaths = Mapping[str, UpgradeCheck]
+"""
+A mapping of target version strings to their checks that must pass.
+
+Defining a version with an upgrade check dictates that those checks must pass before
+the application can be upgraded to the specified version.
+"""
+
+
+class InvalidVersionError(ValueError):
+    pass
+
+
+class TargetVersionMatchError(ValueError):
+    pass
+
+
+def check_upgrade_possible(
+    upgrade_paths: UpgradePaths,
+    *,
+    from_version: str,
+    to_version: str,
+    raise_if_no_match: bool = False,
+) -> bool:
+    """
+    Test if upgrading from ``from_version`` to ``to_version`` is possible.
+
+    :arg upgrade_paths: The upgrade path configuration, specifying which checks apply
+      for which target/upgrade version.
+    :arg from_version: The starting version - must be a version string in SemVer format.
+    :arg to_version: The target version - must be a version string in SemVer format.
+    """
+    if from_version == to_version:
+        return True
+
+    try:
+        _from_version = Version(from_version)
+        _to_version = Version(to_version)
+    except ValueError as exc:
+        raise InvalidVersionError(str(exc)) from exc
+
+    # find the most appropriate constraint - check for exact matches first
+    target_version: str
+    if to_version in upgrade_paths:
+        target_version = to_version
+        compare_spec = SimpleSpec(f"~={target_version}")
+    else:
+        for target_version in upgrade_paths.keys():
+            # 2. Check the ~=X.Y.x version range, which allows the major.minor range. E.g.
+            # 2.0.1 matches ~= 2.0.0, but 2.1.0 does not. Similarly, 1.5 matches ~= 1.4 (!).
+            compare_spec = SimpleSpec(f"~={target_version}")
+            if _to_version in compare_spec:
+                break
+        else:
+            # no match found - could be deliberate, could be a mistake -> users can
+            # opt into strict mode
+            if raise_if_no_match:
+                raise TargetVersionMatchError(
+                    f"No match found for target version '{to_version}'."
+                )
+            return True
+
+    assert target_version
+    # if we have a loose spec (e.g. 2.0) and you're already on 2.0.x, ensure we skip
+    # the upgrade checks.
+    if _from_version in compare_spec:
+        return True
+
+    upgrade_check = upgrade_paths[target_version]
+    version_check_ok = upgrade_check.check_version(_from_version)
+    return version_check_ok
