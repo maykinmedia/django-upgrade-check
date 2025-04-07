@@ -9,20 +9,22 @@ We currently only support SemVer for the version comparisons.
 """
 
 from collections.abc import Collection
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from semantic_version import Version
 
 __all__ = ["VersionRange", "UpgradeCheck"]
 
 
-@dataclass(frozen=True)
+@dataclass(slots=True, unsafe_hash=True)
 class VersionRange:
     """
     Describe a minimum required version and optional upper bound.
 
     The version range bounds are inclusive. E.g. a range of ``1.0.3 - 1.0.5`` covers
     the versions ``1.0.3``, ``1.0.4`` and ``1.0.5``.
+
+    ``VersionRange`` instances are intended to be immutable.
     """
 
     minimum: str
@@ -39,13 +41,17 @@ class VersionRange:
     If you specify a partial range like ``2.0``, anything newer than ``2.0.0`` will
     be considered out of range.
     """
+    _min_version: Version = field(init=False)
+    _max_version: Version | None = field(init=False)
+
+    def __post_init__(self):
+        self._min_version = Version.coerce(self.minimum)
+        self._max_version = Version.coerce(self.maximum) if self.maximum else None
 
     def contains(self, in_version: Version):
-        min_version = Version.coerce(self.minimum)
-        max_version = Version.coerce(self.maximum) if self.maximum else None
-        if in_version < min_version:
+        if in_version < self._min_version:
             return False
-        if max_version and in_version > max_version:
+        if self._max_version and in_version > self._max_version:
             return False
         return True
 

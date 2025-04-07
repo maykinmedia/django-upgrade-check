@@ -67,6 +67,19 @@ def test_ugprade_check_single_range(test_version: str, expected: bool):
     assert result == expected
 
 
+def test_upgrade_check_collection_set_hashing():
+    check = UpgradeCheck(
+        valid_range={
+            VersionRange(minimum="1.1.3", maximum="1.1.5"),
+            VersionRange(minimum="1.2.0", maximum="2.0.0"),
+        }
+    )
+
+    num_ranges = len(check.valid_ranges)
+
+    assert num_ranges == 2
+
+
 @pytest.mark.parametrize(
     "test_version,expected",
     [
