@@ -1,6 +1,11 @@
 from django.conf import settings
 
-from .constraints import TargetVersionMatchError, UpgradePaths, check_upgrade_possible
+from .constraints import (
+    InvalidVersionError,
+    TargetVersionMatchError,
+    UpgradePaths,
+    check_upgrade_possible,
+)
 from .models import Version
 from .recorder import get_version_info
 
@@ -48,6 +53,11 @@ def run_upgrade_check():
             to_version=target,
             raise_if_no_match=strict,
         )
+    except InvalidVersionError as exc:
+        if strict:
+            raise UpgradeBlocked("Invalid semver version provided.") from exc
+        else:
+            return
     except TargetVersionMatchError as exc:
         raise UpgradeBlocked(err_msg) from exc
 

@@ -70,3 +70,83 @@ def test_upgrade_check_undefined_target_version_with_strict_checks(settings):
 
     with pytest.raises(UpgradeBlocked):
         run_upgrade_check()
+
+
+@pytest.mark.parametrize(
+    "target_version",
+    [
+        "latest",
+        "dev",
+        "",
+    ],
+)
+def test_upgrade_check_non_semver_block_in_strict_mode(settings, target_version: str):
+    settings.RELEASE = target_version
+    settings.GIT_SHA = "abcd1234"
+    settings.UPGRADE_CHECK_STRICT = True
+    Version.objects.create(version="1.3.4", git_sha="dummy")
+
+    with pytest.raises(UpgradeBlocked):
+        run_upgrade_check()
+
+
+@pytest.mark.parametrize(
+    "current_version",
+    [
+        "latest",
+        "dev",
+        "",
+    ],
+)
+def test_upgrade_check_non_semver_current_block_in_strict_mode(
+    settings, current_version: str
+):
+    settings.RELEASE = "2.0.0"
+    settings.GIT_SHA = "abcd1234"
+    settings.UPGRADE_CHECK_STRICT = True
+    Version.objects.create(version=current_version, git_sha="dummy")
+
+    with pytest.raises(UpgradeBlocked):
+        run_upgrade_check()
+
+
+@pytest.mark.parametrize(
+    "target_version",
+    [
+        "latest",
+        "dev",
+        "",
+    ],
+)
+def test_upgrade_check_non_semver_dont_block_in_lax_mode(settings, target_version: str):
+    settings.RELEASE = target_version
+    settings.GIT_SHA = "abcd1234"
+    settings.UPGRADE_CHECK_STRICT = False
+    Version.objects.create(version="1.3.4", git_sha="dummy")
+
+    try:
+        run_upgrade_check()
+    except UpgradeBlocked:
+        pytest.fail("Upgrade check should pass")
+
+
+@pytest.mark.parametrize(
+    "current_version",
+    [
+        "latest",
+        "dev",
+        "",
+    ],
+)
+def test_upgrade_check_non_semver__current_dont_block_in_lax_mode(
+    settings, current_version: str
+):
+    settings.RELEASE = "2.0.0"
+    settings.GIT_SHA = "abcd1234"
+    settings.UPGRADE_CHECK_STRICT = False
+    Version.objects.create(version=current_version, git_sha="dummy")
+
+    try:
+        run_upgrade_check()
+    except UpgradeBlocked:
+        pytest.fail("Upgrade check should pass")
