@@ -6,4 +6,6 @@ class DjangoUpgradeCheckConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
 
     def ready(self):
+        # register checks and signals
+        from . import checks  # noqa
         from . import signals  # noqa

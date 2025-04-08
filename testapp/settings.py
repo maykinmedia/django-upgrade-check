@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from django_upgrade_check.constraints import UpgradeCheck, VersionRange
+
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 SECRET_KEY = "so-secret-i-cant-believe-you-are-looking-at-this"
@@ -59,3 +61,8 @@ STATIC_URL = "/static/"
 
 RELEASE = os.getenv("RELEASE", "latest")
 GIT_SHA = os.getenv("GIT_SHA", "latest")
+
+UPGRADE_CHECK_STRICT = False
+UPGRADE_CHECK_PATHS = {
+    "2.0": UpgradeCheck(VersionRange(minimum="1.0")),
+}

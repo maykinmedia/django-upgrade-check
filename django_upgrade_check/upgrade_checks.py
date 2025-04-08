@@ -36,7 +36,9 @@ def run_upgrade_check() -> UpgradeCheckResult:
     and deliberately don't do any additional timestamp checks or filtering to account
     for possible (small) clock drifts.
     """
-    most_recent_recorded_version = Version.objects.order_by("-timestamp").first()
+    most_recent_recorded_version = (
+        Version.objects.order_by("-timestamp").only("version").first()
+    )
     # if we have no version history, any version can be deployed -> check passes
     if most_recent_recorded_version is None:
         return UpgradeCheckResult(ok=True, from_version="", to_version="")
