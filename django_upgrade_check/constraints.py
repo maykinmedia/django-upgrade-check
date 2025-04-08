@@ -16,6 +16,7 @@ from semantic_version import SimpleSpec, Version
 __all__ = [
     "VersionRange",
     "UpgradeCheck",
+    "UpgradePaths",
     "InvalidVersionError",
     "TargetVersionMatchError",
     "check_upgrade_possible",
@@ -145,8 +146,9 @@ def check_upgrade_possible(
         compare_spec = SimpleSpec(f"~={target_version}")
     else:
         for target_version in upgrade_paths.keys():
-            # 2. Check the ~=X.Y.x version range, which allows the major.minor range. E.g.
-            # 2.0.1 matches ~= 2.0.0, but 2.1.0 does not. Similarly, 1.5 matches ~= 1.4 (!).
+            # 2. Check the ~=X.Y.x version range, which allows the major.minor range.
+            # E.g. 2.0.1 matches ~= 2.0.0, but 2.1.0 does not. Similarly, 1.5 matches
+            # ~= 1.4 (!).
             compare_spec = SimpleSpec(f"~={target_version}")
             if _to_version in compare_spec:
                 break

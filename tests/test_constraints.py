@@ -195,7 +195,7 @@ def test_dont_block_if_already_in_target_range():
     ],
 )
 def test_invalid_input_versions(from_version: str, to_version: str):
-    with pytest.raises(InvalidVersionError) as err_ctx:
+    with pytest.raises(InvalidVersionError):
         check_upgrade_possible(
             UPGRADE_CONFIG, from_version=from_version, to_version=to_version
         )
