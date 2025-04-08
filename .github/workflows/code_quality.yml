@@ -20,7 +20,7 @@ jobs:
           - isort
           - black
           - flake8
-          # - docs
+          - docs
           - typecheck
     steps:
       - uses: actions/checkout@v4
