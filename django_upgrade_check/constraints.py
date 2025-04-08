@@ -108,11 +108,15 @@ the application can be upgraded to the specified version.
 
 
 class InvalidVersionError(ValueError):
-    pass
+    def __init__(self, message: str, *args):
+        self.message = message
+        super().__init__(message, *args)
 
 
 class TargetVersionMatchError(ValueError):
-    pass
+    def __init__(self, message: str, *args):
+        self.message = message
+        super().__init__(message, *args)
 
 
 def check_upgrade_possible(

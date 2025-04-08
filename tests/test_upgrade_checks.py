@@ -2,7 +2,7 @@ import pytest
 
 from django_upgrade_check.constraints import UpgradeCheck, UpgradePaths, VersionRange
 from django_upgrade_check.models import Version
-from django_upgrade_check.upgrade_checks import UpgradeBlocked, run_upgrade_check
+from django_upgrade_check.upgrade_checks import run_upgrade_check
 
 pytestmark = pytest.mark.django_db
 
@@ -23,8 +23,11 @@ def test_upgrade_check_upgrade_blocked(settings):
     settings.GIT_SHA = "abcd1234"
     Version.objects.create(version="1.0.0", git_sha="dummy")
 
-    with pytest.raises(UpgradeBlocked):
-        run_upgrade_check()
+    result = run_upgrade_check()
+
+    assert not result.ok
+    assert not result.warning
+    assert result.error
 
 
 def test_upgrade_check_upgrade_ok(settings):
@@ -33,10 +36,11 @@ def test_upgrade_check_upgrade_ok(settings):
     settings.GIT_SHA = "abcd1234"
     Version.objects.create(version="1.3.4", git_sha="dummy")
 
-    try:
-        run_upgrade_check()
-    except UpgradeBlocked:
-        pytest.fail("Upgrade check should pass")
+    result = run_upgrade_check()
+
+    assert result.ok
+    assert not result.warning
+    assert not result.error
 
 
 def test_upgrade_check_no_prior_history_upgrade_ok(settings):
@@ -45,10 +49,11 @@ def test_upgrade_check_no_prior_history_upgrade_ok(settings):
     settings.GIT_SHA = "abcd1234"
     assert not Version.objects.exists()
 
-    try:
-        run_upgrade_check()
-    except UpgradeBlocked:
-        pytest.fail("Upgrade check should pass")
+    result = run_upgrade_check()
+
+    assert result.ok
+    assert not result.warning
+    assert not result.error
 
 
 def test_upgrade_check_undefined_target_version_with_lax_checks(settings):
@@ -56,10 +61,11 @@ def test_upgrade_check_undefined_target_version_with_lax_checks(settings):
     settings.GIT_SHA = "abcd1234"
     Version.objects.create(version="1.3.4", git_sha="dummy")
 
-    try:
-        run_upgrade_check()
-    except UpgradeBlocked:
-        pytest.fail("Upgrade check should pass")
+    result = run_upgrade_check()
+
+    assert result.ok
+    assert not result.warning
+    assert not result.error
 
 
 def test_upgrade_check_undefined_target_version_with_strict_checks(settings):
@@ -68,8 +74,11 @@ def test_upgrade_check_undefined_target_version_with_strict_checks(settings):
     settings.UPGRADE_CHECK_STRICT = True
     Version.objects.create(version="1.3.4", git_sha="dummy")
 
-    with pytest.raises(UpgradeBlocked):
-        run_upgrade_check()
+    result = run_upgrade_check()
+
+    assert not result.ok
+    assert not result.warning
+    assert result.error
 
 
 @pytest.mark.parametrize(
@@ -86,8 +95,11 @@ def test_upgrade_check_non_semver_block_in_strict_mode(settings, target_version:
     settings.UPGRADE_CHECK_STRICT = True
     Version.objects.create(version="1.3.4", git_sha="dummy")
 
-    with pytest.raises(UpgradeBlocked):
-        run_upgrade_check()
+    result = run_upgrade_check()
+
+    assert not result.ok
+    assert not result.warning
+    assert result.error
 
 
 @pytest.mark.parametrize(
@@ -106,8 +118,11 @@ def test_upgrade_check_non_semver_current_block_in_strict_mode(
     settings.UPGRADE_CHECK_STRICT = True
     Version.objects.create(version=current_version, git_sha="dummy")
 
-    with pytest.raises(UpgradeBlocked):
-        run_upgrade_check()
+    result = run_upgrade_check()
+
+    assert not result.ok
+    assert not result.warning
+    assert result.error
 
 
 @pytest.mark.parametrize(
@@ -124,10 +139,11 @@ def test_upgrade_check_non_semver_dont_block_in_lax_mode(settings, target_versio
     settings.UPGRADE_CHECK_STRICT = False
     Version.objects.create(version="1.3.4", git_sha="dummy")
 
-    try:
-        run_upgrade_check()
-    except UpgradeBlocked:
-        pytest.fail("Upgrade check should pass")
+    result = run_upgrade_check()
+
+    assert result.ok
+    assert result.warning
+    assert not result.error
 
 
 @pytest.mark.parametrize(
@@ -138,7 +154,7 @@ def test_upgrade_check_non_semver_dont_block_in_lax_mode(settings, target_versio
         "",
     ],
 )
-def test_upgrade_check_non_semver__current_dont_block_in_lax_mode(
+def test_upgrade_check_non_semver_current_dont_block_in_lax_mode(
     settings, current_version: str
 ):
     settings.RELEASE = "2.0.0"
@@ -146,7 +162,8 @@ def test_upgrade_check_non_semver__current_dont_block_in_lax_mode(
     settings.UPGRADE_CHECK_STRICT = False
     Version.objects.create(version=current_version, git_sha="dummy")
 
-    try:
-        run_upgrade_check()
-    except UpgradeBlocked:
-        pytest.fail("Upgrade check should pass")
+    result = run_upgrade_check()
+
+    assert result.ok
+    assert result.warning
+    assert not result.error
