@@ -62,3 +62,36 @@ def test_upgrade_not_possible_reports_error(settings):
         id="upgrade_check.E001",
     )
     assert result == [expected_error]
+
+
+def test_invalid_version_warning_emitted_with_debug_false(settings):
+    settings.DEBUG = False
+    settings.UPGRADE_CHECK_STRICT = False
+    settings.RELEASE = "dev"
+    settings.UPGRADE_CHECK_PATHS = {
+        "2.0.0": UpgradeCheck(VersionRange(minimum="1.2.0")),
+    }
+    Version.objects.create(version="1.2.0")
+
+    result = check_upgrade_possible(None)
+
+    expected_warning = Warning(
+        "Could not reliably check the upgrade path - apply caution.",
+        hint="Invalid version string: 'dev'",
+        id="upgrade_check.W001",
+    )
+    assert result == [expected_warning]
+
+
+def test_invalid_version_no_warning_emitted_with_debug_true(settings):
+    settings.DEBUG = True
+    settings.UPGRADE_CHECK_STRICT = False
+    settings.RELEASE = "dev"
+    settings.UPGRADE_CHECK_PATHS = {
+        "2.0.0": UpgradeCheck(VersionRange(minimum="1.2.0")),
+    }
+    Version.objects.create(version="1.2.0")
+
+    result = check_upgrade_possible(None)
+
+    assert result == []

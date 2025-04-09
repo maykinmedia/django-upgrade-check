@@ -59,7 +59,7 @@ def run_upgrade_check() -> UpgradeCheckResult:
             ok=not strict,
             from_version=current,
             to_version=target,
-            warning=exc.message if not strict else "",
+            warning=exc.message if (not strict and not settings.DEBUG) else "",
             error=f"Invalid semver version provided. {exc.message}" if strict else "",
         )
 
