@@ -58,7 +58,7 @@ release = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["django_upgrade_check*"]
+include = ["upgrade_check*"]
 namespaces = true
 
 [tool.isort]
@@ -66,7 +66,7 @@ profile = "black"
 combine_as_imports = true
 skip = ["env", ".tox", ".history", ".eggs"]
 known_django = "django"
-known_first_party="django_upgrade_check"
+known_first_party="upgrade_check"
 sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 
 [tool.pytest.ini_options]
@@ -83,7 +83,7 @@ files = [
 
 [tool.coverage.run]
 branch = true
-source = ["django_upgrade_check"]
+source = ["upgrade_check"]
 omit = [
     # migrations run while django initializes the test db
     "*/migrations/*",
@@ -101,7 +101,7 @@ exclude_also = [
 
 [tool.pyright]
 include = [
-    "django_upgrade_check",
+    "upgrade_check",
     "testapp",
     "tests",
 ]

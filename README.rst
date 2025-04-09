@@ -1,10 +1,10 @@
 
 
-Welcome to django_upgrade_check's documentation!
-=================================================
+Welcome to django-upgrade-check's documentation!
+================================================
 
 :Version: 0.1.0
-:Source: https://github.com/maykinmedia/django_upgrade_check
+:Source: https://github.com/maykinmedia/django-upgrade-check
 :Keywords: ``<keywords>``
 :PythonVersion: 3.10
 
@@ -39,7 +39,7 @@ Install
 
 .. code-block:: bash
 
-    pip install django_upgrade_check
+    pip install django-upgrade-check
 
 
 Usage
@@ -61,34 +61,34 @@ directory to the python path (or use ``python -m django <command>``):
 
 .. code-block:: bash
 
-    export PYTHONPATH=. DJANGO_SETTINGS_MODULE=testapp.settings
+    export PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=testapp.settings
     django-admin check
     # or other commands like:
     # django-admin makemessages -l nl
 
 
-.. |build-status| image:: https://github.com/maykinmedia/django_upgrade_check/workflows/Run%20CI/badge.svg
+.. |build-status| image:: https://github.com/maykinmedia/django-upgrade-check/workflows/Run%20CI/badge.svg
     :alt: Build status
-    :target: https://github.com/maykinmedia/django_upgrade_check/actions?query=workflow%3A%22Run+CI%22
+    :target: https://github.com/maykinmedia/django-upgrade-check/actions?query=workflow%3A%22Run+CI%22
 
-.. |code-quality| image:: https://github.com/maykinmedia/django_upgrade_check/workflows/Code%20quality%20checks/badge.svg
+.. |code-quality| image:: https://github.com/maykinmedia/django-upgrade-check/workflows/Code%20quality%20checks/badge.svg
      :alt: Code quality checks
-     :target: https://github.com/maykinmedia/django_upgrade_check/actions?query=workflow%3A%22Code+quality+checks%22
+     :target: https://github.com/maykinmedia/django-upgrade-check/actions?query=workflow%3A%22Code+quality+checks%22
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/django_upgrade_check/branch/main/graph/badge.svg
-    :target: https://codecov.io/gh/maykinmedia/django_upgrade_check
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/django-upgrade-check/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/maykinmedia/django-upgrade-check
     :alt: Coverage status
 
-.. |docs| image:: https://readthedocs.org/projects/django_upgrade_check/badge/?version=latest
-    :target: https://django_upgrade_check.readthedocs.io/en/latest/?badge=latest
+.. |docs| image:: https://readthedocs.org/projects/django-upgrade-check/badge/?version=latest
+    :target: https://django-upgrade-check.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. |python-versions| image:: https://img.shields.io/pypi/pyversions/django_upgrade_check.svg
+.. |python-versions| image:: https://img.shields.io/pypi/pyversions/django-upgrade-check.svg
 
-.. |django-versions| image:: https://img.shields.io/pypi/djversions/django_upgrade_check.svg
+.. |django-versions| image:: https://img.shields.io/pypi/djversions/django-upgrade-check.svg
 
-.. |pypi-version| image:: https://img.shields.io/pypi/v/django_upgrade_check.svg
-    :target: https://pypi.org/project/django_upgrade_check/
+.. |pypi-version| image:: https://img.shields.io/pypi/v/django-upgrade-check.svg
+    :target: https://pypi.org/project/django-upgrade-check/

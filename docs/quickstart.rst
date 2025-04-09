@@ -9,7 +9,7 @@ Install from PyPI with pip:
 
 .. code-block:: bash
 
-    pip install django_upgrade_check
+    pip install django-upgrade-check
 
 
 Usage

@@ -1,7 +1,7 @@
 import pytest
 from semantic_version import Version
 
-from django_upgrade_check.constraints import (
+from upgrade_check.constraints import (
     InvalidVersionError,
     TargetVersionMatchError,
     UpgradeCheck,

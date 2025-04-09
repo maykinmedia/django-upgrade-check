@@ -1,9 +1,9 @@
-.. django_upgrade_check documentation master file, created by startproject.
+.. django-upgrade-check documentation master file, created by startproject.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to django_upgrade_check's documentation!
-=================================================
+Welcome to django-upgrade-check's documentation!
+================================================
 
 |build-status| |code-quality| |black| |coverage| |docs|
 

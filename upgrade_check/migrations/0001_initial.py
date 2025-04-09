@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import django_upgrade_check.models
+import upgrade_check.models
 
 
 class Migration(migrations.Migration):
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 (
                     "machine_name",
                     models.CharField(
-                        default=django_upgrade_check.models.get_machine_name,
+                        default=upgrade_check.models.get_machine_name,
                         editable=False,
                         help_text=(
                             "The host name of the machine this version was recorded on."

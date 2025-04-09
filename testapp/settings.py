@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from django_upgrade_check.constraints import UpgradeCheck, VersionRange
+from upgrade_check.constraints import UpgradeCheck, VersionRange
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.admin",
     "django.contrib.staticfiles",
-    "django_upgrade_check",
+    "upgrade_check",
     "testapp",
 ]
 

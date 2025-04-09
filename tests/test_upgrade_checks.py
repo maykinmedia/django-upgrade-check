@@ -1,8 +1,8 @@
 import pytest
 
-from django_upgrade_check.constraints import UpgradeCheck, UpgradePaths, VersionRange
-from django_upgrade_check.models import Version
-from django_upgrade_check.upgrade_checks import run_upgrade_check
+from upgrade_check.constraints import UpgradeCheck, UpgradePaths, VersionRange
+from upgrade_check.models import Version
+from upgrade_check.upgrade_checks import run_upgrade_check
 
 pytestmark = pytest.mark.django_db
 

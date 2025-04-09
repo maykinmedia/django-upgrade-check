@@ -14,14 +14,14 @@ import sys
 from pathlib import Path
 
 current_dir = Path(__file__).parents[1]
-code_directory = current_dir / "django_upgrade_check"
+code_directory = current_dir / "upgrade_check"
 
 sys.path.insert(0, str(code_directory))
 
 
 # -- Project information -----------------------------------------------------
 
-project = "django_upgrade_check"
+project = "django-upgrade-check"
 copyright = "2025, Maykin Media"
 author = "Maykin Media"
 

@@ -5,8 +5,8 @@ from django.core.management import call_command
 
 import pytest
 
-from django_upgrade_check.models import Version, get_machine_name
-from django_upgrade_check.recorder import record_current_version
+from upgrade_check.models import Version, get_machine_name
+from upgrade_check.recorder import record_current_version
 
 
 @pytest.mark.django_db
@@ -32,7 +32,7 @@ def test_record_new_version_debounce(settings, caplog: pytest.LogCaptureFixture)
     assert record_current_version() is not None
 
     # recording again in quick succession should debounce
-    with caplog.at_level(logging.INFO, logger="django_upgrade_check.recorder"):
+    with caplog.at_level(logging.INFO, logger="upgrade_check.recorder"):
         result = record_current_version()
 
     machine_name = get_machine_name()

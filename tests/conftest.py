@@ -1,6 +1,6 @@
 import pytest
 
-from django_upgrade_check.models import Version
+from upgrade_check.models import Version
 
 
 @pytest.fixture(autouse=True)

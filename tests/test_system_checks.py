@@ -5,9 +5,9 @@ from django.db import connection
 
 import pytest
 
-from django_upgrade_check.checks import check_upgrade_possible
-from django_upgrade_check.constraints import UpgradeCheck, VersionRange
-from django_upgrade_check.models import Version
+from upgrade_check.checks import check_upgrade_possible
+from upgrade_check.constraints import UpgradeCheck, VersionRange
+from upgrade_check.models import Version
 
 
 @pytest.mark.django_db
@@ -22,7 +22,7 @@ def test_db_errors_are_non_fatal(caplog: pytest.LogCaptureFixture):
     with connection.cursor() as cursor:
         cursor.execute(f"DROP TABLE {Version._meta.db_table};")
 
-    with caplog.at_level(logging.INFO, logger="django_upgrade_check.checks"):
+    with caplog.at_level(logging.INFO, logger="upgrade_check.checks"):
         result = check_upgrade_possible(None)
 
     assert result == []

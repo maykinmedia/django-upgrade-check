@@ -1,8 +1,8 @@
 include *.rst
 include LICENSE
-include {{ project_name }}/py.typed
-recursive-include {{ project_name }} *.html
-recursive-include {{ project_name }} *.txt
-recursive-include {{ project_name }} *.po
+include upgrade_check/py.typed
+recursive-include upgrade_check *.html
+recursive-include upgrade_check *.txt
+recursive-include upgrade_check *.po
 global-exclude __pycache__
 global-exclude *.py[co]
