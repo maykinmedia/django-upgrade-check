@@ -37,7 +37,7 @@ or check the ``docs`` folder.
 Local development
 =================
 
-To install and develop the library locally, use::
+To install and develop the library locally, use:
 
 .. code-block:: bash
 
