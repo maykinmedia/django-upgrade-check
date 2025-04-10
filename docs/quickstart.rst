@@ -38,6 +38,8 @@ Next, ensure the following settings are defined in your project:
 
     .. code-block:: python
 
+        from upgrade_check import UpgradeCheck, VersionRange
+
         UPGRADE_CHECK_PATHS = {
             "2.0": UpgradeCheck(VersionRange(minimum="1.0")),
         }
@@ -64,6 +66,6 @@ You're all set! As long as ``settings.RELEASE`` accurately reflects the new vers
 being deployed, and you manage ``settings.UPGRADE_CHECK_STRICT``, the library takes it
 from there:
 
-* on invalid upgrade paths, the systme check errors out
+* on invalid upgrade paths, the system check errors out
 * because migrations (by default) run system checks before migrating, this prevents
   your database from being modified
