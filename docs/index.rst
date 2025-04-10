@@ -32,8 +32,7 @@ Features
 * Define supported upgrade paths in settings using Semantic Versioning.
 * Integrates with Django's system check framework, preventing migrations from running
   on invalid upgrade paths.
-* Planned: run management commands as part of a check.
-* Planned: hook up your own checks as simple python functions.
+* Run management commands as part of a check, or even entirely custom code.
 * Battle-tested and doesn't get in the way during development.
 
 .. toctree::

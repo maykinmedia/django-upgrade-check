@@ -10,6 +10,7 @@ We currently only support SemVer for the version comparisons.
 
 from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass, field
+from typing import Protocol
 
 from django.core.management import CommandError, call_command
 
@@ -65,6 +66,18 @@ class VersionRange:
         return True
 
 
+class CodeCheck(Protocol):
+    """
+    Run a code-based check.
+
+    The ``execute`` method must return a boolean indicating a pass (``True``) or fail
+    (``False``). Code checks are responsible for their own error reporting to
+    stdout/stderr.
+    """
+
+    def execute(self) -> bool: ...
+
+
 class CommandCheck:
     """
     A management command and its options to call as part of the upgrade check.
@@ -78,9 +91,9 @@ class CommandCheck:
         self.command = command
         self.options = options
 
-    def run(self) -> bool:
+    def execute(self) -> bool:
         """
-        Run the management command.
+        Execute the management command.
 
         If it doesn't return, treat the check as success. If it raises ``CommandError``,
         fail the check. Management commands are responsible for their own output.
@@ -109,18 +122,18 @@ class UpgradeCheck:
     """
 
     valid_ranges: Collection[VersionRange]
-    command_checks: Sequence[CommandCheck]
+    code_checks: Sequence[CodeCheck]
 
     def __init__(
         self,
         valid_range: VersionRange | Collection[VersionRange],
-        commands: Sequence[CommandCheck] = (),
+        code_checks: Sequence[CodeCheck] = (),
     ):
         # normalize to a collection
         self.valid_ranges = (
             (valid_range,) if isinstance(valid_range, VersionRange) else valid_range
         )
-        self.command_checks = commands
+        self.code_checks = code_checks
 
     def check_version(self, current_version: Version) -> bool:
         """
@@ -212,8 +225,9 @@ def check_upgrade_possible(
     if not version_check_ok:
         return False
 
-    for command_check in upgrade_check.command_checks:
-        if not command_check.run():
+    for code_check in upgrade_check.code_checks:
+        success = code_check.execute()
+        if not success:
             return False
 
     return True

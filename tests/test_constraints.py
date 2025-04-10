@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import pytest
 from semantic_version import Version
 
@@ -206,7 +208,7 @@ def test_management_command_fails_check():
     upgrade_config = {
         "1.1.0": UpgradeCheck(
             valid_range=VersionRange(minimum="1.0.0"),
-            commands=[
+            code_checks=[
                 CommandCheck("fail_upgrade_check", options={"fail": True}),
             ],
         )
@@ -223,7 +225,7 @@ def test_management_command_passes_check():
     upgrade_config = {
         "1.1.0": UpgradeCheck(
             valid_range=VersionRange(minimum="1.0.0"),
-            commands=[CommandCheck("fail_upgrade_check")],
+            code_checks=[CommandCheck("fail_upgrade_check")],
         )
     }
 
@@ -232,3 +234,41 @@ def test_management_command_passes_check():
     )
 
     assert result is True
+
+
+@dataclass
+class Check:
+    outcome: bool
+
+    def execute(self) -> bool:
+        return self.outcome
+
+
+def test_custom_code_check_pass():
+    upgrade_config = {
+        "1.1.0": UpgradeCheck(
+            valid_range=VersionRange(minimum="1.0.0"),
+            code_checks=[Check(outcome=True)],
+        )
+    }
+
+    result = check_upgrade_possible(
+        upgrade_config, from_version="1.0.0", to_version="1.1.0"
+    )
+
+    assert result is True
+
+
+def test_custom_code_check_fail():
+    upgrade_config = {
+        "1.1.0": UpgradeCheck(
+            valid_range=VersionRange(minimum="1.0.0"),
+            code_checks=[Check(outcome=False)],
+        )
+    }
+
+    result = check_upgrade_possible(
+        upgrade_config, from_version="1.0.0", to_version="1.1.0"
+    )
+
+    assert result is False
