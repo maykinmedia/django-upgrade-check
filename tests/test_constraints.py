@@ -2,6 +2,7 @@ import pytest
 from semantic_version import Version
 
 from upgrade_check.constraints import (
+    CommandCheck,
     InvalidVersionError,
     TargetVersionMatchError,
     UpgradeCheck,
@@ -199,3 +200,35 @@ def test_invalid_input_versions(from_version: str, to_version: str):
         check_upgrade_possible(
             UPGRADE_CONFIG, from_version=from_version, to_version=to_version
         )
+
+
+def test_management_command_fails_check():
+    upgrade_config = {
+        "1.1.0": UpgradeCheck(
+            valid_range=VersionRange(minimum="1.0.0"),
+            commands=[
+                CommandCheck("fail_upgrade_check", options={"fail": True}),
+            ],
+        )
+    }
+
+    result = check_upgrade_possible(
+        upgrade_config, from_version="1.0.0", to_version="1.1.0"
+    )
+
+    assert result is False
+
+
+def test_management_command_passes_check():
+    upgrade_config = {
+        "1.1.0": UpgradeCheck(
+            valid_range=VersionRange(minimum="1.0.0"),
+            commands=[CommandCheck("fail_upgrade_check")],
+        )
+    }
+
+    result = check_upgrade_possible(
+        upgrade_config, from_version="1.0.0", to_version="1.1.0"
+    )
+
+    assert result is True

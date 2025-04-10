@@ -8,8 +8,10 @@ and project-specific checks.
 We currently only support SemVer for the version comparisons.
 """
 
-from collections.abc import Collection, Mapping
+from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass, field
+
+from django.core.management import CommandError, call_command
 
 from semantic_version import SimpleSpec, Version
 
@@ -63,6 +65,37 @@ class VersionRange:
         return True
 
 
+class CommandCheck:
+    """
+    A management command and its options to call as part of the upgrade check.
+
+    :arg command: Name of the management command to call.
+    :arg options: Any additional keyword arguments are forwarded to the
+        ``call_command`` call.
+    """
+
+    def __init__(self, command: str, *, options: dict[str, object] | None = None):
+        self.command = command
+        self.options = options
+
+    def run(self) -> bool:
+        """
+        Run the management command.
+
+        If it doesn't return, treat the check as success. If it raises ``CommandError``,
+        fail the check. Management commands are responsible for their own output.
+
+        :return: ``True`` indicating success, ``False`` if the check failed.
+        """
+        options = self.options or {}
+        try:
+            call_command(self.command, **options)
+        except CommandError:
+            return False
+        else:
+            return True
+
+
 class UpgradeCheck:
     """
     Define the conditions for a valid upgrade check.
@@ -76,15 +109,18 @@ class UpgradeCheck:
     """
 
     valid_ranges: Collection[VersionRange]
+    command_checks: Sequence[CommandCheck]
 
     def __init__(
         self,
         valid_range: VersionRange | Collection[VersionRange],
+        commands: Sequence[CommandCheck] = (),
     ):
         # normalize to a collection
         self.valid_ranges = (
             (valid_range,) if isinstance(valid_range, VersionRange) else valid_range
         )
+        self.command_checks = commands
 
     def check_version(self, current_version: Version) -> bool:
         """
@@ -173,4 +209,11 @@ def check_upgrade_possible(
 
     upgrade_check = upgrade_paths[target_version]
     version_check_ok = upgrade_check.check_version(_from_version)
-    return version_check_ok
+    if not version_check_ok:
+        return False
+
+    for command_check in upgrade_check.command_checks:
+        if not command_check.run():
+            return False
+
+    return True
