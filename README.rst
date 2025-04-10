@@ -12,7 +12,7 @@ Welcome to django-upgrade-check's documentation!
 
 |python-versions| |django-versions| |pypi-version|
 
-<One liner describing the project>
+Integrate project upgrade checks in Django's system check framework.
 
 .. contents::
 
@@ -21,31 +21,18 @@ Welcome to django-upgrade-check's documentation!
 Features
 ========
 
-* ...
-* ...
+* Define supported upgrade paths in settings using Semantic Versioning.
+* Integrates with Django's system check framework, preventing migrations from running
+  on invalid upgrade paths.
+* Planned: run management commands as part of a check.
+* Planned: hook up your own checks as simple python functions.
+* Battle-tested and doesn't get in the way during development.
 
-Installation
-============
+Installation and usage
+======================
 
-Requirements
-------------
-
-* Python 3.10 or above
-* Django 4.2 or newer
-
-
-Install
--------
-
-.. code-block:: bash
-
-    pip install django-upgrade-check
-
-
-Usage
-=====
-
-<document or refer to docs>
+See the `documentation <https://django-upgrade-check.readthedocs.io/>`_ on ReadTheDocs
+or check the ``docs`` folder.
 
 Local development
 =================

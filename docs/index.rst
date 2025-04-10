@@ -9,13 +9,32 @@ Welcome to django-upgrade-check's documentation!
 
 |python-versions| |django-versions| |pypi-version|
 
-<One liner describing the project>
+Integrate project upgrade checks in Django's system check framework.
+
+Imagine you keep improving you Django project and you share this to the world with new
+releases. Sooner or later, you will run into some situation where upgrading an existing
+instance goes horribly wrong because they're updating from a version you did not
+anticipate or account for. Or, you did account for it and put it in the release notes,
+but people skipped over those.
+
+You can avoid the support nightmare created in such situations by leveraging adding
+django-upgrade-check to your project and then express which (minimum) versions are
+required before you can upgrade to a newer version. If the check doesn't pass, nothing
+is lost - the instance code can be downgraded again and you don't have to worry about
+rolling back database migrations.
+
+.. note:: We only support semantic versioning. If you use a different versioning scheme,
+   this package is unfortunately not suitable for your needs.
 
 Features
 ========
 
-* ...
-* ...
+* Define supported upgrade paths in settings using Semantic Versioning.
+* Integrates with Django's system check framework, preventing migrations from running
+  on invalid upgrade paths.
+* Planned: run management commands as part of a check.
+* Planned: hook up your own checks as simple python functions.
+* Battle-tested and doesn't get in the way during development.
 
 .. toctree::
    :maxdepth: 2
@@ -23,6 +42,14 @@ Features
 
    quickstart
 
+
+Credits
+=======
+
+Django-upgrade-check was originally part of the
+`Open Formulieren <http://github.com/open-formulieren/open-forms>`_ project. We wanted
+to be able to squash migrations and not have to maintain certain data migrations until
+the end of days, while still providing strong guarantees for (production) instances.
 
 
 Indices and tables
