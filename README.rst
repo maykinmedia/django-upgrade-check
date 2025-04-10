@@ -3,7 +3,7 @@
 Welcome to django-upgrade-check's documentation!
 ================================================
 
-:Version: 0.1.0
+:Version: 0.2.0
 :Source: https://github.com/maykinmedia/django-upgrade-check
 :Keywords: ``<keywords>``
 :PythonVersion: 3.10
