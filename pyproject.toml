@@ -44,9 +44,7 @@ tests = [
     "pytest-django",
     "pytest-cov",
     "tox",
-    "isort",
-    "black",
-    "flake8",
+    "ruff",
     "pyright",
     "django-stubs",
 ]
@@ -61,14 +59,6 @@ release = [
 [tool.setuptools.packages.find]
 include = ["upgrade_check*"]
 namespaces = true
-
-[tool.isort]
-profile = "black"
-combine_as_imports = true
-skip = ["env", ".tox", ".history", ".eggs"]
-known_django = "django"
-known_first_party="upgrade_check"
-sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -109,3 +99,26 @@ include = [
 ignore = []
 pythonVersion = "3.12"
 pythonPlatform = "Linux"
+
+[tool.ruff.lint]
+extend-select = [
+    "UP",  # pyupgrade
+    "DJ",  # django
+    "LOG", # logging
+    "G",
+    "I",   # isort
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+section-order = [
+    "future",
+    "standard-library",
+    "django",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.ruff.lint.isort.sections]
+"django" = ["django"]

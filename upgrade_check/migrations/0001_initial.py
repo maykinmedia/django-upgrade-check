@@ -6,7 +6,6 @@ import upgrade_check.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
