@@ -41,6 +41,7 @@ Features
    :caption: Contents:
 
    quickstart
+   reference
    changelog
 
 
