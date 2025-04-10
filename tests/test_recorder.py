@@ -23,6 +23,7 @@ def test_record_new_version(settings):
     assert version.git_sha == "abcd1234"
     assert version.timestamp is not None
     assert version.machine_name != ""
+    assert "1.2.3@" in str(version)
 
 
 @pytest.mark.django_db
