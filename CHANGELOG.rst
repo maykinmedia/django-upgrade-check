@@ -2,6 +2,14 @@
 Changelog
 =========
 
+1.0.0 (2025-04-10)
+==================
+
+Django-upgrade-check is now feature complete.
+
+* Added ability to run code checks.
+* Added management command checks as built-in code check.
+
 0.2.0 (2025-04-10)
 ==================
 
