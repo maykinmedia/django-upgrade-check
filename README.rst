@@ -5,7 +5,7 @@ Welcome to django-upgrade-check's documentation!
 
 :Version: 0.2.0
 :Source: https://github.com/maykinmedia/django-upgrade-check
-:Keywords: ``<keywords>``
+:Keywords: django, deploy, system checks, semver
 :PythonVersion: 3.10
 
 |build-status| |code-quality| |black| |coverage| |docs|
