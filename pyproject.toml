@@ -107,6 +107,12 @@ extend-select = [
     "LOG", # logging
     "G",
     "I",   # isort
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "PERF",# perflint
+    "B006",# flake8-bugbear
+    "B010",
+    "B904",
 ]
 
 [tool.ruff.lint.isort]
