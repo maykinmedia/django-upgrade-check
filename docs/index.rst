@@ -73,7 +73,7 @@ Indices and tables
     :target: https://github.com/astral-sh/ruff
     :alt: Ruff
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/django-upgrade-check/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/django-upgrade-check/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/maykinmedia/django-upgrade-check
     :alt: Coverage status
 
