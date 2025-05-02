@@ -56,16 +56,16 @@ def test_upgrade_check_no_prior_history_upgrade_ok(settings):
     assert not result.error
 
 
-def test_upgrade_check_undefined_target_version_with_lax_checks(settings):
+def test_upgrade_check_undefined_target_version_ok(settings):
     settings.RELEASE = "4.0.0"
     settings.GIT_SHA = "abcd1234"
     Version.objects.create(version="1.3.4", git_sha="dummy")
 
     result = run_upgrade_check()
 
-    assert result.ok
+    assert not result.ok
     assert not result.warning
-    assert not result.error
+    assert result.error
 
 
 def test_upgrade_check_undefined_target_version_with_strict_checks(settings):

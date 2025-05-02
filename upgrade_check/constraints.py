@@ -25,6 +25,9 @@ __all__ = [
     "check_upgrade_possible",
 ]
 
+OP_GREATER_OR_EQUAL = ">="
+OP_COMPATIBLE = "~="
+
 
 @dataclass(slots=True, unsafe_hash=True)
 class VersionRange:
@@ -193,16 +196,17 @@ def check_upgrade_possible(
         raise InvalidVersionError(str(exc)) from exc
 
     # find the most appropriate constraint - check for exact matches first
+    operator = OP_GREATER_OR_EQUAL if not raise_if_no_match else OP_COMPATIBLE
     target_version: str
     if to_version in upgrade_paths:
         target_version = to_version
-        compare_spec = SimpleSpec(f"~={target_version}")
+        compare_spec = SimpleSpec(f"{operator}{target_version}")
     else:
         for target_version in upgrade_paths:
             # 2. Check the ~=X.Y.x version range, which allows the major.minor range.
             # E.g. 2.0.1 matches ~= 2.0.0, but 2.1.0 does not. Similarly, 1.5 matches
             # ~= 1.4 (!).
-            compare_spec = SimpleSpec(f"~={target_version}")
+            compare_spec = SimpleSpec(f"{operator}{target_version}")
             if _to_version in compare_spec:
                 break
         else:

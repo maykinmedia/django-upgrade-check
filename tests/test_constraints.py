@@ -133,6 +133,8 @@ UPGRADE_CONFIG = {
     [
         ("1.0.0", "1.4.0", False),
         ("1.2.1", "1.4.0", False),
+        ("1.2.1", "1.5.0", False),
+        ("1.2.2", "1.5.0", True),
         ("1.2.2", "1.4.0", True),
         ("1.2.3", "1.4.0", True),
         ("1.2.3", "1.4.1", True),
@@ -140,11 +142,15 @@ UPGRADE_CONFIG = {
         ("1.2.9", "1.4.2", True),
         ("1.2.10", "1.4.2", False),
         ("1.3.3", "1.4.0", False),
+        ("1.3.3", "1.5.0", False),
         ("1.3.4", "1.4.0", True),
+        ("1.3.4", "1.5.0", True),
         ("1.3.999", "1.4.999", True),
         ("1.4.0", "1.4.0", True),
         ("1.3.5", "1.4.9", False),
+        ("1.3.5", "1.5.0", True),
         ("1.4.4", "1.4.9", True),
+        ("1.4.4", "1.5.0", True),
     ],
 )
 def test_upgrade_possible(from_version: str, to_version: str, expected_result: bool):
@@ -152,7 +158,7 @@ def test_upgrade_possible(from_version: str, to_version: str, expected_result: b
         UPGRADE_CONFIG,
         from_version=from_version,
         to_version=to_version,
-        raise_if_no_match=True,
+        raise_if_no_match=False,
     )
 
     assert result == expected_result
