@@ -2,6 +2,15 @@
 Changelog
 =========
 
+1.1.0 (2025-05-07)
+==================
+
+Feature release to improve developer experience.
+
+* In lax mode, the upgrade version comparison is now compared with ``>=`` rather
+  than ``~=``, meaning that newer versions enforce the requirements of the most recent
+  upgrade target. Thanks to @danielmursa-dev for the contribution!
+
 1.0.0 (2025-04-10)
 ==================
 

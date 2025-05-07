@@ -1,7 +1,7 @@
 Welcome to django-upgrade-check's documentation!
 ================================================
 
-:Version: 1.0.0
+:Version: 1.1.0
 :Source: https://github.com/maykinmedia/django-upgrade-check
 :Keywords: django, deploy, system checks, semver
 
