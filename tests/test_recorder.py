@@ -4,9 +4,38 @@ from io import StringIO
 from django.core.management import call_command
 
 import pytest
+from django_test_migrations.migrator import Migrator
+from django_test_migrations.plan import all_migrations
 
 from upgrade_check.models import Version, get_machine_name
 from upgrade_check.recorder import record_current_version
+
+
+@pytest.mark.django_db
+def test_record_without_db_tables(migrator: Migrator, caplog: pytest.LogCaptureFixture):
+    # On an empty db we should still be able to run part of the migration plan
+    # e.g.
+    #
+    # manage.py contenttypes 0001_initial
+    #
+    # should not fail because our Version tables don't exist yet.
+
+    initial_state = migrator.apply_initial_migration(("upgrade_check", None))
+
+    with pytest.raises(LookupError):
+        initial_state.apps.get_model("upgrade_check", "Version")
+
+    with caplog.at_level(logging.WARNING):
+        assert record_current_version() is None
+
+    assert "django-upgrade-check is not ready" in caplog.text
+
+
+    # migrator.reset() doesn't seem to work... find last by hand:
+    last = all_migrations(app_names=["upgrade_check"])[-1]
+    migrator.apply_tested_migration(last.key)
+
+    assert record_current_version() is not None
 
 
 @pytest.mark.django_db

@@ -2,6 +2,7 @@ import logging
 from datetime import timedelta
 
 from django.conf import settings
+from django.db import OperationalError, ProgrammingError
 from django.utils import timezone
 
 from .models import Version, get_machine_name
@@ -42,9 +43,18 @@ def record_current_version() -> Version | None:
 
     # check if we have a recorded version already for the same machine name to avoid
     # flooding the database (e.g. when there's a crashloop in kubernetes...)
-    has_version = Version.objects.filter(
-        machine_name=machine_name, version=version, timestamp__gte=cutoff
-    ).exists()
+    try:
+        has_version = Version.objects.filter(
+            machine_name=machine_name, version=version, timestamp__gte=cutoff
+        ).exists()
+    except (OperationalError, ProgrammingError):
+        # Table doesn't exist yet (our migration hasn't run yet)
+        logger.warning(
+            "django-upgrade-check is not ready to check this migration path.\n"
+            "First run ./migrate upgrade_check to enable it."
+        )
+        return None
+
     if has_version:
         extra = {
             "version": version,
