@@ -2,14 +2,13 @@
 Changelog
 =========
 
-1.1.0 (2025-05-07)
+X.X.X (unreleased)
 ==================
 
-Feature release to improve developer experience.
+Add django 6 support.
 
-* In lax mode, the upgrade version comparison is now compared with ``>=`` rather
-  than ``~=``, meaning that newer versions enforce the requirements of the most recent
-  upgrade target. Thanks to @danielmursa-dev for the contribution!
+* This PR add support for Django 6 by changing the deprecated "check" in favor of "condition".
+* A constraint for non-empty versions is now enforced.
 
 1.0.0 (2025-04-10)
 ==================
