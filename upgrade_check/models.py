@@ -1,6 +1,5 @@
 import socket
 
-from django import VERSION
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -58,12 +57,7 @@ class Version(models.Model):
         constraints = [
             models.CheckConstraint(
                 name="non_empty_version",
-                check=~models.Q(version=""),  # Django 4.2 LTS (EOL: 2026-04)
-            )
-            if VERSION < (5, 2)
-            else models.CheckConstraint(
-                name="non_empty_version",
-                condition=~models.Q(version=""),  # Django >= 5.2
+                condition=~models.Q(version=""),
             ),
         ]
         ordering = ("-timestamp",)
