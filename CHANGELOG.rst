@@ -2,13 +2,13 @@
 Changelog
 =========
 
-X.X.X (unreleased)
+2.0.0 (unreleased)
 ==================
 
 Add django 6 support.
 
-* This PR add support for Django 6 by changing the deprecated "check" in favor of "condition".
-* A constraint for non-empty versions is now enforced.
+* Added Django 6 support.
+* Fixed a bug that caused empty version names to be accepted.
 
 1.0.0 (2025-04-10)
 ==================
