@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2.0.0 (unreleased)
+2.0.0 (2026-04-03)
 ==================
 
 Maintenance and bugfix release.
