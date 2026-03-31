@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from django.db import IntegrityError
+
 import pytest
 from semantic_version import Version
 
@@ -11,6 +13,7 @@ from upgrade_check.constraints import (
     VersionRange,
     check_upgrade_possible,
 )
+from upgrade_check.models import Version as VersionModel
 
 
 @pytest.mark.parametrize(
@@ -278,3 +281,8 @@ def test_custom_code_check_fail():
     )
 
     assert result is False
+
+
+def test_non_empty_version():
+    with pytest.raises(IntegrityError):
+        VersionModel.objects.create(version="")

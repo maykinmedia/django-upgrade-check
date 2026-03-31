@@ -86,7 +86,6 @@ def test_upgrade_check_undefined_target_version_with_strict_checks(settings):
     [
         "latest",
         "dev",
-        "",
     ],
 )
 def test_upgrade_check_non_semver_block_in_strict_mode(settings, target_version: str):
@@ -107,7 +106,6 @@ def test_upgrade_check_non_semver_block_in_strict_mode(settings, target_version:
     [
         "latest",
         "dev",
-        "",
     ],
 )
 def test_upgrade_check_non_semver_current_block_in_strict_mode(
@@ -130,7 +128,6 @@ def test_upgrade_check_non_semver_current_block_in_strict_mode(
     [
         "latest",
         "dev",
-        "",
     ],
 )
 def test_upgrade_check_non_semver_dont_block_in_lax_mode(settings, target_version: str):
@@ -151,7 +148,6 @@ def test_upgrade_check_non_semver_dont_block_in_lax_mode(settings, target_versio
     [
         "latest",
         "dev",
-        "",
     ],
 )
 def test_upgrade_check_non_semver_current_dont_block_in_lax_mode(

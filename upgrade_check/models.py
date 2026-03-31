@@ -54,9 +54,10 @@ class Version(models.Model):
         indexes = [
             models.Index(models.F("timestamp").desc(), name="timestamp_idx"),
         ]
-        models.constraints = [
+        constraints = [
             models.CheckConstraint(
-                name="non_empty_version", check=~models.Q(version="")
+                name="non_empty_version",
+                condition=~models.Q(version=""),
             ),
         ]
         ordering = ("-timestamp",)

@@ -2,19 +2,31 @@
 Changelog
 =========
 
-1.1.0 (2025-05-07)
+2.0.0 (unreleased)
 ==================
 
-Feature release to improve developer experience.
+Maintenance and bugfix release.
 
-* In lax mode, the upgrade version comparison is now compared with ``>=`` rather
-  than ``~=``, meaning that newer versions enforce the requirements of the most recent
-  upgrade target. Thanks to @danielmursa-dev for the contribution!
+**Breaking changes**
+
+* Dropped Django 4.2 support.
+* Constraint ``non_empty_version`` is now enforced, existing installations should make sure no empty `Version` objects
+  are present.
+
+**Features**
+
+* [#5] Added Django 6 support.
+
+**Bugfixes**
+
+* Fixed incorrect constraint initialization in ``Version`` model.
 
 1.0.0 (2025-04-10)
 ==================
 
-Django-upgrade-check is now feature complete.
+Feature release, Django-upgrade-check is now feature complete.
+
+**Features**
 
 * Added ability to run code checks.
 * Added management command checks as built-in code check.
