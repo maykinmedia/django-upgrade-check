@@ -5,15 +5,28 @@ Changelog
 2.0.0 (unreleased)
 ==================
 
-Add django 6 support.
+Maintenance and bugfix release.
 
-* Added Django 6 support.
-* Fixed a bug that caused empty version names to be accepted.
+**Breaking changes**
+
+* Dropped Django 4.2 support.
+* Constraint ``non_empty_version`` is now enforced, existing installations should make sure no empty `Version` objects
+  are present.
+
+**Features**
+
+* [#5] Added Django 6 support.
+
+**Bugfixes**
+
+* Fixed incorrect constraint initialization in ``Version`` model.
 
 1.0.0 (2025-04-10)
 ==================
 
-Django-upgrade-check is now feature complete.
+Feature release, Django-upgrade-check is now feature complete.
+
+**Features**
 
 * Added ability to run code checks.
 * Added management command checks as built-in code check.
