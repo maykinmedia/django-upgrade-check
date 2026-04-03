@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-upgrade-check"
-version = "1.1.0"
+version = "2.0.0"
 description = "Integrate project upgrade checks in Django's system check framework"
 authors = [
     {name = "Maykin Media", email = "support@maykinmedia.nl"}
@@ -66,7 +66,7 @@ testpaths = ["tests"]
 DJANGO_SETTINGS_MODULE = "testapp.settings"
 
 [tool.bumpversion]
-current_version = "1.1.0"
+current_version = "2.0.0"
 files = [
     {filename = "pyproject.toml"},
     {filename = "README.rst"},
