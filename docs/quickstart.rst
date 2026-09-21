@@ -26,7 +26,7 @@ Next, ensure the following settings are defined in your project:
 
 ``settings.RELEASE``
     The version number of the code, e.g. ``"1.0.3"``. If it's not a semnver version
-    (e.g. ``dev`` in develoment), upgrade checks are skipped.
+    (e.g. ``dev`` in development), upgrade checks are skipped.
 
 ``settings.GIT_SHA``
     The commit hash matching this version. Required, but can be any string - it's only
@@ -50,7 +50,7 @@ Next, ensure the following settings are defined in your project:
 ``settings.UPGRADE_CHECK_STRICT``
     Default ``False`` - in strict mode, if ``settings.RELEASE`` cannot be matched to any
     target version in ``settings.UPGRADE_CHECK_PATHS``, the upgrade check will fail and
-    block the upgrade. In develoment with strict mode, warnings will be emitted that are
+    block the upgrade. In development with strict mode, warnings will be emitted that are
     otherwise silencded.
 
 Finally, run migrate to create the necessary database tables:
