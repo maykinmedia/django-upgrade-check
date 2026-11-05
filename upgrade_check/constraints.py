@@ -17,11 +17,11 @@ from django.core.management import CommandError, call_command
 from semantic_version import SimpleSpec, Version
 
 __all__ = [
-    "VersionRange",
-    "UpgradeCheck",
-    "UpgradePaths",
     "InvalidVersionError",
     "TargetVersionMatchError",
+    "UpgradeCheck",
+    "UpgradePaths",
+    "VersionRange",
     "check_upgrade_possible",
 ]
 
@@ -64,9 +64,7 @@ class VersionRange:
     def contains(self, in_version: Version):
         if in_version < self._min_version:
             return False
-        if self._max_version and in_version > self._max_version:
-            return False
-        return True
+        return not (self._max_version and in_version > self._max_version)
 
 
 class CodeCheck(Protocol):

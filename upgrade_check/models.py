@@ -1,4 +1,5 @@
 import socket
+from typing import ClassVar
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -51,10 +52,10 @@ class Version(models.Model):
     class Meta:
         verbose_name = _("version")
         verbose_name_plural = _("versions")
-        indexes = [
+        indexes: ClassVar[list[models.Index]] = [
             models.Index(models.F("timestamp").desc(), name="timestamp_idx"),
         ]
-        constraints = [
+        constraints: ClassVar[list[models.BaseConstraint]] = [
             models.CheckConstraint(
                 name="non_empty_version",
                 condition=~models.Q(version=""),
